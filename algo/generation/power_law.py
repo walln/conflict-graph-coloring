@@ -1,20 +1,23 @@
 import random
 from algo.structures.graph import Graph
 
-def generate_power_law_graph(num_vertices, num_edges_per_vertex) -> Graph:
+def generate_power_law_graph(num_vertices, num_edges_total) -> Graph:
     """
-    This function generates a power-law graph with the specified number of vertices and edges per vertex.
+    This function generates a power-law graph with the specified number of vertices and total number of edges.
 
     A power-law graph is a graph where the degree distribution follows a power-law, meaning that a small
     number of vertices have a high degree while the majority of vertices have a low degree.
 
     Args:
         num_vertices (int): The number of vertices in the power-law graph.
-        num_edges_per_vertex (int): The number of edges per vertex in the power-law graph.
+        num_edges_total (int): The total number of edges in the power-law graph.
 
     Returns:
         A power-law graph.
     """
+    # Calculate the number of edges per vertex
+    num_edges_per_vertex = int(num_edges_total / num_vertices)
+
     graph = Graph(num_vertices)
 
     # Start with a small complete graph (at least 2 vertices)
