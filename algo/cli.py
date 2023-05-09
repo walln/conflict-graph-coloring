@@ -237,11 +237,5 @@ def cli_p2():
             f.write(f'{vertex},{color}\n')
     print(f'{"Coloring written to file."} 🚀')
 
-    # TODO:
-    # Graph results (needs above ^)
-    # Maybe add more ordering methods
-    # Cleanup repo
-    # Write paper
-
 if __name__ == "__main__":
     cli_p1()

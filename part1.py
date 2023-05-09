@@ -404,3 +404,5 @@ def part1():
 
     write_graph_to_file(graph, output_fname)
     print(f'Graph written to {output_fname} 🚀')
+
+part1()
