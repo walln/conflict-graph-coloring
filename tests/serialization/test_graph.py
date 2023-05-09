@@ -1,6 +1,5 @@
 import pytest
 from algo.generation.complete import generate_complete_graph
-from algo.generation.uniform_random import generate_uniform_random_graph
 from algo.structures.graph import Graph
 from algo.serialization.graph import write_graph_to_file, read_graph_from_file
 
@@ -110,7 +109,7 @@ def test_write_and_read_parallel_edges_graph(tmp_path):
 
 
 def test_write_and_read_large_graph(tmp_path):
-    graph = generate_uniform_random_graph(1000, 5000)
+    graph = generate_complete_graph(1000)
 
     temp_file = tmp_path / "large_graph.txt"
     write_graph_to_file(graph, str(temp_file))

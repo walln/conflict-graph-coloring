@@ -21,7 +21,8 @@ def largest_last_vertex_ordering(graph: Graph) -> Tuple[List[int], Dict[str, Uni
 
     ordering = []
 
-    degrees = [len([_ for _ in node]) for node in graph.adj_list]
+    # degrees = [len([_ for _ in node]) for node in graph.adj_list]
+    degrees = [graph.degree(v) for v in range(graph.V)]
 
     while len(ordering) < graph.V:
         max_degree = -1

@@ -40,10 +40,11 @@ def smallest_last_vertex_ordering(graph: Graph) -> Tuple[List[int], Dict[str, Un
         remaining_vertices.remove(min_vertex)
         ordering.append(min_vertex)
         deleted_degrees[min_vertex] = min_degree
-        for node in graph.adj_list[min_vertex]:
-            neighbor = node.vertex
-            if neighbor in remaining_vertices:
-                degrees[neighbor] -= 1
+        if graph.adj_list[min_vertex] is not None:
+            for node in graph.adj_list[min_vertex]:
+                neighbor = node.vertex
+                if neighbor in remaining_vertices:
+                    degrees[neighbor] -= 1
 
     end_time = time()
 

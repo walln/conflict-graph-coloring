@@ -1,37 +1,44 @@
 import random
 from algo.structures.graph import Graph
 
-def generate_power_law_graph(num_vertices, num_edges_total) -> Graph:
-    """
-    This function generates a power-law graph with the specified number of vertices and total number of edges.
 
-    A power-law graph is a graph where the degree distribution follows a power-law, meaning that a small
-    number of vertices have a high degree while the majority of vertices have a low degree.
+def generate_power_law_random_graph(num_vertices, num_conflicts, power=2.5) -> Graph:
+    """
+    This function generates a random undirected graph with a power-law random
+    distribution for selecting vertex pairs.
 
     Args:
-        num_vertices (int): The number of vertices in the power-law graph.
-        num_edges_total (int): The total number of edges in the power-law graph.
+        num_vertices (int): The number of vertices in the graph.
+        num_conflicts (int): The number of distinct edges to add to the graph.
+        power (float): The power parameter for the power-law distribution.
 
     Returns:
-        A power-law graph.
+        A random undirected graph object.
     """
-    # Calculate the number of edges per vertex
-    num_edges_per_vertex = int(num_edges_total / num_vertices)
+
+    assert num_conflicts <= (num_vertices*(num_vertices-1))/2, \
+        "Number of edges cannot be greater than the maximum possible number of edges"
 
     graph = Graph(num_vertices)
 
-    # Start with a small complete graph (at least 2 vertices)
-    for i in range(num_edges_per_vertex):
-        for j in range(i + 1, num_edges_per_vertex):
-            graph.add_edge(i, j)
+    existing_edge_count = 0
+    existing_edges = set(graph.edges())
 
-    # For each new vertex, connect to existing vertices with probability proportional to their degree
-    for vertex in range(num_edges_per_vertex, num_vertices):
-        connected_vertices = set()
-        while len(connected_vertices) < num_edges_per_vertex:
-            candidate_vertex = random.choice(range(vertex))
-            if candidate_vertex not in connected_vertices:
-                connected_vertices.add(candidate_vertex)
-                graph.add_edge(vertex, candidate_vertex)
+    # Calculate degree distribution
+    degree_sum = sum([i**power for i in range(1, num_vertices+1)])
+    probs = [i**power / degree_sum for i in range(1, num_vertices+1)]
+
+    # Add edges
+    while existing_edge_count < num_conflicts:
+        v1 = random.choices(range(num_vertices), weights=probs)[0]
+        v2 = random.choices(range(num_vertices), weights=probs)[0]
+
+        if v1 != v2:
+            if (v1, v2) not in existing_edges and (v2, v1) not in existing_edges:
+                graph.add_edge(v1, v2)
+                graph.add_edge(v2, v1)
+                existing_edges.add((v1, v2))
+                existing_edges.add((v2, v1))
+                existing_edge_count += 1
 
     return graph

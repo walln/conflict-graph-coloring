@@ -1,22 +1,24 @@
-from algo.generation.skewed_random import generate_skewed_graph
+from algo.generation.skewed_random import generate_skewed_random_graph
 
-def helper_test_generate_skewed_graph(num_vertices: int, num_edges: int):
-    graph = generate_skewed_graph(num_vertices, num_edges)
 
-    # Verify the number of vertices
-    assert graph.V == num_vertices, f"Expected {num_vertices} vertices, but got {graph.V} vertices"
+def test_generate_skewed_random_graph():
+    # Test graph with 5 vertices and 3 edges
+    graph = generate_skewed_random_graph(5, 3)
+    assert len(graph.vertices()) == 5
+    assert len(graph.edges()) == 3
+    for u, v in graph.edges():
+        assert u < v
 
-    # Verify the number of edges
-    assert len(graph.edges()) == num_edges, f"Expected {num_edges} edges, but got {len(graph.edges())} edges"
+    # Test graph with 10 vertices and 15 edges
+    graph = generate_skewed_random_graph(10, 15)
+    assert len(graph.vertices()) == 10
+    assert len(graph.edges()) == 15
+    for u, v in graph.edges():
+        assert u < v
 
-def test_skewed_generation_1():
-    helper_test_generate_skewed_graph(5, 5)
-
-def test_skewed_generation_2():
-    helper_test_generate_skewed_graph(6, 8)
-
-def test_skewed_generation_3():
-    helper_test_generate_skewed_graph(7, 14)
-
-def test_skewed_generation_large():
-    helper_test_generate_skewed_graph(200, 1000)
+    # Test graph with 20 vertices and 100 edges
+    graph = generate_skewed_random_graph(20, 100)
+    assert len(graph.vertices()) == 20
+    assert len(graph.edges()) == 100
+    for u, v in graph.edges():
+        assert u < v

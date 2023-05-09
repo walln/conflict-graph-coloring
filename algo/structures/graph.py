@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Node:
     def __init__(self, value):
         self.vertex = value
@@ -12,33 +15,27 @@ class Node:
 class Graph:
     def __init__(self, num_verticies: int) -> None:
         self.V = num_verticies
-        self.adj_list = [None] * self.V
+        self.adj_list: List[Node] = [None] * self.V
 
     def vertices(self) -> list[int]:
         return list(range(self.V))
 
-    def edges(self) -> list[int]:
+    def edges(self) -> list[tuple[int, int]]:
         """
         Returns a list of all edges in the graph as tuples (u, v), where u and v are connected vertices.
         """
-        edges = []
-
-        # Iterate through all vertices in the graph
+        edges = set()
         for u in range(self.V):
-            # Iterate through the adjacency list of vertex u
-            temp = self.adj_list[u]
-            while temp:
-                v = temp.vertex
-
-                # Since the graph is undirected, add each edge only once by checking if u < v
+            node = self.adj_list[u]
+            while node:
+                v = node.vertex
                 if u < v:
-                    edges.append((u, v))
-
-                temp = temp.next
-
-        return edges
+                    edges.add((u, v))
+                node = node.next
+        return list(edges)
 
     def add_edge(self, s, d):
+        # Create new node
         node = Node(d)
         node.next = self.adj_list[s]
         self.adj_list[s] = node
@@ -46,6 +43,14 @@ class Graph:
         node = Node(s)
         node.next = self.adj_list[d]
         self.adj_list[d] = node
+
+    def edge_exists(self, u, v):
+        temp = self.adj_list[u]
+        while temp:
+            if temp.vertex == v:
+                return True
+            temp = temp.next
+        return False
 
     def print_graph(self):
         for i in range(self.V):
@@ -132,5 +137,42 @@ def bron_kerbosch(graph: Graph, r=None, p=None, x=None):
 
 def terminal_clique_size(graph: Graph):
     all_cliques = bron_kerbosch(graph)
+    terminal_clique = max(all_cliques, key=len)
+    return len(terminal_clique)
+
+
+def bron_kerbosch2(graph: Graph, r=None, p=None, x=None, pivot=True):
+    if r is None:
+        r = set()
+    if p is None:
+        p = set(range(graph.V))
+    if x is None:
+        x = set()
+
+    if not p and not x:
+        return [r]
+
+    cliques = []
+    if pivot:
+
+        u = max(p | x, key=lambda v: len(graph.neighbors(v)))
+        neighbors = set(graph.neighbors(u))
+        loop_over = p - neighbors
+    else:
+        loop_over = p.copy()
+
+    for v in loop_over:
+        neighbors = set(graph.neighbors(v))
+        new_r = r | {v}
+        new_p = p & neighbors
+        new_x = x & neighbors
+        cliques += bron_kerbosch2(graph, new_r, new_p, new_x, pivot=pivot)
+        p.remove(v)
+        x.add(v)
+
+    return cliques
+
+def terminal_clique_size2(graph: Graph):
+    all_cliques = bron_kerbosch2(graph)
     terminal_clique = max(all_cliques, key=len)
     return len(terminal_clique)

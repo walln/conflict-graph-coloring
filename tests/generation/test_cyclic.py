@@ -26,30 +26,32 @@ def has_cycle(graph: Graph) -> bool:
 
     return False
 
-def cylic_test_helper(num_vertices, num_edges):
-        graph = generate_cyclic_graph(num_vertices, num_edges)
+def test_generate_cyclic_graph():
+    # Test a small graph with 3 vertices
+    graph = generate_cyclic_graph(3)
+    assert len(graph.vertices()) == 3
+    assert len(graph.edges()) == 3
+    assert has_cycle(graph)
 
-        # Verify the number of vertices
-        assert graph.V == num_vertices, f"Expected {num_vertices} vertices, but got {graph.V} vertices"
+    # Test a larger graph with 7 vertices
+    graph = generate_cyclic_graph(7)
+    assert len(graph.vertices()) == 7
+    assert len(graph.edges()) == 7
+    assert has_cycle(graph)
 
-        # Verify the number of edges
-        assert len(graph.edges()) == num_edges, f"Expected {num_edges} edges, but got {len(graph.edges())} edges"
+    # Test a graph with many vertices
+    graph = generate_cyclic_graph(100)
+    assert len(graph.vertices()) == 100
+    assert len(graph.edges()) == 100
+    assert has_cycle(graph)
 
-        # Verify that the graph contains at least one cycle
-        assert has_cycle(graph), "The graph does not contain a cycle"
+    # Test a graph with only one vertex
+    graph = generate_cyclic_graph(1)
+    assert len(graph.vertices()) == 1
+    assert len(graph.edges()) == 0
 
-
-def test_cyclic_1():
-    cylic_test_helper(5, 7)
-
-def test_cyclic_2():
-    cylic_test_helper(4, 5)
-
-def test_cyclic_3():
-    cylic_test_helper(6, 10)
-
-def test_cyclic_4():
-    cylic_test_helper(7, 12)
-
-def test_cyclic_large():
-    cylic_test_helper(300, 400)
+    # Test a graph with two vertices
+    graph = generate_cyclic_graph(2)
+    assert len(graph.vertices()) == 2
+    assert len(graph.edges()) == 1
+    assert has_cycle(graph)

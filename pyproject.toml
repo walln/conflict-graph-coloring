@@ -6,8 +6,9 @@ authors = ["Nick <46641379+walln@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "3.9"
 matplotlib = "^3.7.1"
+scipy = "1.6.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"

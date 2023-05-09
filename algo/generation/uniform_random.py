@@ -1,31 +1,39 @@
 import random
+
 from algo.structures.graph import Graph
 
-def generate_uniform_random_graph(num_vertices, num_edges):
+def generate_uniform_random_graph(num_vertices, num_conflicts) -> Graph:
     """
-    This function generates a uniform random graph with the specified number of vertices and edges.
-
-    A uniform random graph is a graph where each pair of distinct vertices has an equal probability
-    of being connected by an edge. The resulting graph has a uniform degree distribution,
-    with the degrees of vertices being approximately equal.
+    This function generates a random undirected graph with a uniform random
+    distribution for selecting vertex pairs.
 
     Args:
-        num_vertices (int): The number of vertices in the uniform random graph.
-        num_edges (int): The total number of edges in the uniform random graph.
+        num_vertices (int): The number of vertices in the graph.
+        num_edges (int): The number of distinct edges to add to the graph.
 
     Returns:
-        A uniform random graph object.
+        A random undirected graph object.
     """
 
-    assert num_edges <= num_vertices * (num_vertices - 1) // 2, \
-          "Number of edges must be less than or equal to the maximum possible edges"
+    assert num_conflicts <= (num_vertices*(num_vertices-1))/2, \
+        "Number of edges cannot be greater than the maximum possible number of edges"
 
     graph = Graph(num_vertices)
 
-    all_possible_edges = [(i, j) for i in range(num_vertices) for j in range(i + 1, num_vertices)]
-    selected_edges = random.sample(all_possible_edges, num_edges)
+    existing_edge_count = 0
+    existing_edges = set(graph.edges())
 
-    for edge in selected_edges:
-        graph.add_edge(edge[0], edge[1])
+    # Add edges
+    while existing_edge_count < num_conflicts:
+        v1 = random.randint(0, num_vertices - 1)
+        v2 = random.randint(0, num_vertices - 1)
+
+        if v1 != v2:
+            if (v1, v2) not in existing_edges and (v2, v1) not in existing_edges:
+                graph.add_edge(v1, v2)
+                graph.add_edge(v2, v1)
+                existing_edges.add((v1, v2))
+                existing_edges.add((v2, v1))
+                existing_edge_count += 1
 
     return graph

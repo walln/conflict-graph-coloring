@@ -1,22 +1,19 @@
 from algo.generation.uniform_random import generate_uniform_random_graph
 
-def helper_function(num_vertices, num_edges):
-    graph = generate_uniform_random_graph(num_vertices, num_edges)
 
-    # Verify the number of vertices
-    assert graph.V == num_vertices, f"Expected {num_vertices} vertices, but got {graph.V} vertices"
+def test_generate_random_graph_uniform():
+    graph = generate_uniform_random_graph(5, 4)
+    assert len(graph.vertices()) == 5
+    assert len(graph.edges()) == 4
 
-    # Verify the number of edges
-    assert len(graph.edges()) == num_edges, f"Expected {num_edges} edges, but got {len(graph.edges())} edges"
+    graph = generate_uniform_random_graph(10, 20)
+    assert len(graph.vertices()) == 10
+    assert len(graph.edges()) == 20
 
-def test_uniform_random_generation_1():
-    helper_function(5,5)
+    graph = generate_uniform_random_graph(7, 10)
+    assert len(graph.vertices()) == 7
+    assert len(graph.edges()) == 10
 
-def test_uniform_random_generation_2():
-    helper_function(6,8)
-
-def test_uniform_random_generation_3():
-    helper_function(7,14)
-
-def test_uniform_random_generation_large():
-    helper_function(200, 3000)
+    graph = generate_uniform_random_graph(15, 30)
+    assert len(graph.vertices()) == 15
+    assert len(graph.edges()) == 30

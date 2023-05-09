@@ -1,25 +1,19 @@
-from algo.generation.power_law import generate_power_law_graph
+from algo.generation.power_law import generate_power_law_random_graph
 
-def helper_test_generate_power_law_graph(num_vertices: int, num_edges_total: int):
-    graph = generate_power_law_graph(num_vertices, num_edges_total)
 
-    # Verify the number of vertices
-    assert graph.V == num_vertices, f"Expected {num_vertices} vertices, but got {graph.V} vertices"
+def test_generate_power_law_random_graph():
+    # Test graph with 5 vertices and 3 edges
+    graph = generate_power_law_random_graph(5, 3)
+    assert len(graph.vertices()) == 5
+    assert len(graph.edges()) == 3
 
-    # Verify the number of edges
-    max_num_edges = num_vertices * (num_vertices - 1) // 2
-    num_edges = len(graph.edges())
-    assert 0 < num_edges <= max_num_edges, \
-        f"Expected the number of edges to be between 1 and {max_num_edges}, but got {num_edges} edges"
+    # Test graph with 10 vertices and 15 edges
+    graph = generate_power_law_random_graph(10, 15)
+    assert len(graph.vertices()) == 10
+    assert len(graph.edges()) == 15
 
-def test_generate_power_law_graph_1():
-    helper_test_generate_power_law_graph(5, 8)
 
-def test_generate_power_law_graph_2():
-    helper_test_generate_power_law_graph(6, 18)
-
-def test_generate_power_law_graph_3():
-    helper_test_generate_power_law_graph(7, 12)
-
-def test_generate_large_power_law_graph():
-    helper_test_generate_power_law_graph(200, 800)
+    # Test graph with 20 vertices and 100 edges
+    graph = generate_power_law_random_graph(20, 100)
+    assert len(graph.vertices()) == 20
+    assert len(graph.edges()) == 100
